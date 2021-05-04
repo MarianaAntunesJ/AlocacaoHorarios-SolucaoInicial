@@ -8,5 +8,11 @@
         public Professor()
         {
         }
+
+        public Professor(string id, string nome)
+        {
+            Id = id;
+            Nome = nome;
+        }
     }
 }

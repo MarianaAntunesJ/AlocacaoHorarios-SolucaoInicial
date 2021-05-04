@@ -2,11 +2,21 @@
 {
     class Dia
     {
-        public DiaDaSemana DiaDaSemana { get; set; }
+        public DiasDaSemana DiaDaSemana { get; set; }
         public Aula[] Aulas { get; set; } = new Aula[2];
+
+        public Dia()
+        {
+        }
+
+        public Dia(DiasDaSemana diaDaSemana, Aula[] aulas)
+        {
+            DiaDaSemana = diaDaSemana;
+            Aulas = aulas;
+        }
     }
 
-    enum DiaDaSemana
+    enum DiasDaSemana
     {
         Segunda,
         Terça,
