@@ -17,7 +17,7 @@ namespace AlocacaoHorarios_SolucaoInicial
 
             var aula = new Aula(disciplina, sala);
 
-            var dia = new Dia(DiasDaSemana.Segunda);
+            var dia = new Dia();
 
             dia.Aulas[1] = aula;
 

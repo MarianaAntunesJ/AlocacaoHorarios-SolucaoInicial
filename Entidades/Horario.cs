@@ -3,11 +3,11 @@
     class Horario
     {
         public Periodos Periodo { get; private set; }
-        private Dia[] _dias { get; set; }
+        public Dia[] Dias { get; private set; }
 
         public Horario()
         {
-            _dias = new Dia[5];
+            Dias = new Dia[5];
         }
 
         public Horario(Periodos periodo) : this()
@@ -15,13 +15,13 @@
             Periodo = periodo;
         }
 
-        public bool DiaOcupado(int index) => _dias[index] != null;
+        public bool DiaDesocupado(int index) => Dias[index] == null;
 
         public bool InsereNoDiaDesocupado(Dia dia, int index)
         {
-            if (!DiaOcupado(index))
+            if (DiaDesocupado(index))
             {
-                _dias[index] = dia;
+                Dias[index] = dia;
                 return true;
             }  
             return false;
@@ -29,9 +29,9 @@
 
         public void TrocaDias(int dia1, int dia2)
         {
-            var aux = _dias[dia1];
-            _dias[dia1] = _dias[dia2];
-            _dias[dia2] = aux;
+            var aux = Dias[dia1];
+            Dias[dia1] = Dias[dia2];
+            Dias[dia2] = aux;
         }
     }
 
@@ -42,5 +42,14 @@
         Quarto,
         Quinto,
         Sexto
+    }
+
+    enum DiasDaSemana
+    {
+        Segunda,
+        Terça,
+        Quarta,
+        Quinta,
+        Sexta
     }
 }
