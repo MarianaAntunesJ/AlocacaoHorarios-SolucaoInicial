@@ -23,8 +23,7 @@ namespace AlocacaoHorarios_SolucaoInicial
 
             var horario = new Horario(Periodos.Primeiro);
 
-            horario.Dias[3] = dia;
-
+            horario.InsereNoDiaDesocupado(dia, 1);
         }
     }
 }
