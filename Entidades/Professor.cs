@@ -2,7 +2,11 @@
 {
     class Professor
     {
+        public string Id { get; set; }
         public string Nome { get; set; }
-        public Disciplina Disciplina { get; set; }
+
+        public Professor()
+        {
+        }
     }
 }
