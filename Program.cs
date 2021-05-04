@@ -7,7 +7,7 @@ namespace AlocacaoHorarios_SolucaoInicial
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {            
             var professor = new Professor("CJ1", "Manzano");
 
@@ -17,9 +17,13 @@ namespace AlocacaoHorarios_SolucaoInicial
 
             var aula = new Aula(disciplina, sala);
 
-            var dia = new Dia(DiasDaSemana.Segunda, new Aula[] { aula, null });
+            var dia = new Dia(DiasDaSemana.Segunda);
 
-            var horario = new Horario(Periodos.Primeiro, new Dia[] { dia });
+            dia.Aulas[1] = aula;
+
+            var horario = new Horario(Periodos.Primeiro);
+
+            horario.Dias[3] = dia;
 
         }
     }

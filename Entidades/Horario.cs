@@ -3,16 +3,16 @@
     class Horario
     {
         public Periodos Periodo { get; set; }
-        public Dia[] Dias { get; set; } = new Dia[5];
+        public Dia[] Dias { get; set; }
 
         public Horario()
         {
+            Dias = new Dia[5];
         }
 
-        public Horario(Periodos periodo, Dia[] dias)
+        public Horario(Periodos periodo) : this()
         {
             Periodo = periodo;
-            Dias = dias;
         }
     }
 

@@ -3,16 +3,16 @@
     class Dia
     {
         public DiasDaSemana DiaDaSemana { get; set; }
-        public Aula[] Aulas { get; set; } = new Aula[2];
+        public Aula[] Aulas { get; set; }
 
         public Dia()
         {
+            Aulas = new Aula[2];
         }
 
-        public Dia(DiasDaSemana diaDaSemana, Aula[] aulas)
+        public Dia(DiasDaSemana diaDaSemana) : this()
         {
             DiaDaSemana = diaDaSemana;
-            Aulas = aulas;
         }
     }
 
