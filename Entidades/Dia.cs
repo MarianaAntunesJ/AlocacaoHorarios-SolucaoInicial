@@ -1,12 +1,19 @@
 ﻿namespace AlocacaoHorarios_SolucaoInicial.Entidades
 {
     class Dia
-    {        
+    {
+        public int Id { get; set; }
         public Aula[] Aulas { get; private set; }
 
         public Dia()
         {
             Aulas = new Aula[2];
+        }
+
+        public Dia(int id, Aula[] aulas)
+        {
+            Id = id;
+            Aulas = aulas;
         }
 
         public bool AulaDesocupada(int index) => Aulas[index] == null;

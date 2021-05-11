@@ -1,14 +1,22 @@
-﻿using AlocacaoHorarios_SolucaoInicial.Entidades;
-using System;
+﻿using AlocacaoHorarios_SolucaoInicial.DAL;
+using AlocacaoHorarios_SolucaoInicial.Entidades;
+using AlocacaoHorarios_SolucaoInicial.View;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace AlocacaoHorarios_SolucaoInicial
 {
     class Program
     {
         static void Main()
-        {            
+        {
+            Seed popula = new Seed();
+
+            Exibicao exibicao = new Exibicao();
+
+            exibicao.ExibirSemana(popula.Dias);
+            
+                     
+            /*
             var professor = new Professor("CJ1", "Manzano");
 
             var disciplina = new Disciplina(1, "LOPA", 6, 60, 1, false, professor);
@@ -19,11 +27,10 @@ namespace AlocacaoHorarios_SolucaoInicial
 
             var dia = new Dia();
 
-            dia.Aulas[1] = aula;
-
             var horario = new Horario(Periodos.Primeiro);
 
             horario.InsereNoDiaDesocupado(dia, 1);
+            */
         }
     }
 }
