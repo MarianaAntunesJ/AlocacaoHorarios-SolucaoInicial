@@ -2,22 +2,23 @@
 {
     class Dia
     {
-        public int Id { get; set; }
+        public DiasDaSemana DiaDaSemana { get; set; }
         public Aula[] Aulas { get; private set; }
 
         public Dia()
         {
-            Aulas = new Aula[2];
+            Aulas = new Aula[4] { new Aula(), new Aula(), new Aula(), new Aula() };
         }
 
-        public Dia(int id, Aula[] aulas)
+        public Dia(DiasDaSemana diaDaSemana, Aula[] aulas)
         {
-            Id = id;
+            DiaDaSemana = diaDaSemana;
             Aulas = aulas;
         }
 
         public bool AulaDesocupada(int index) => Aulas[index] == null;
 
+        //ToDo: Refazer para vetor[4]
         public bool InsereNaAulaDesocupada(Aula aula, int index)
         {
             if (AulaDesocupada(index))
@@ -28,11 +29,21 @@
             return false;
         }
 
+        //ToDo: Refazer para vetor[4]
         public void TrocaDias(int aula1, int aula2)
         {
             var aux = Aulas[aula1];
             Aulas[aula1] = Aulas[aula2];
             Aulas[aula2] = aux;
         }
+    }
+
+    enum DiasDaSemana
+    {
+        Segunda = 1,
+        Terça = 2,
+        Quarta = 3,
+        Quinta = 4,
+        Sexta = 5
     }
 }

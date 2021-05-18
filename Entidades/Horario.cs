@@ -35,6 +35,7 @@
         }
     }
 
+    //ToDo: o que ele faz?
     enum Periodos
     {
         Primeiro,
@@ -42,14 +43,5 @@
         Quarto,
         Quinto,
         Sexto
-    }
-
-    enum DiasDaSemana
-    {
-        Segunda,
-        Terça,
-        Quarta,
-        Quinta,
-        Sexta
     }
 }

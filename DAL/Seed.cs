@@ -1,5 +1,7 @@
 ﻿using AlocacaoHorarios_SolucaoInicial.Entidades;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AlocacaoHorarios_SolucaoInicial.DAL
 {
@@ -9,7 +11,89 @@ namespace AlocacaoHorarios_SolucaoInicial.DAL
         public List<Sala> Salas { get; }
         public List<Disciplina> Disciplinas { get; }
         public List<Aula> Aulas { get; }
-        public List<Dia> Dias { get; }
+        public List<Dia> Semana { get; }
+
+        /*
+         LOGICA PARA REUTILIZAR
+
+         private int PrimeiroHorario = 0;
+        private int SegundoHorario = 1;
+
+        public IEnumerable<Dia> CriaSemana()
+        {
+            var dias = new List<Dia>();
+            for (var i = 1; i <= 5; i++)
+                dias.Add(new Dia() { Id = i });
+            return dias;
+        }
+
+        public bool AulaRepetidaNoDia(Aula aula, Dia dia)
+            => (AulaRepetidaNoHorario(aula, dia, PrimeiroHorario) || AulaRepetidaNoHorario(aula, dia, SegundoHorario));
+        public bool AulaRepetidaNoHorario(Aula aula, Dia dia, int horario)
+            => aula.Id == dia.Aulas[horario].Id;
+
+        public bool HorarioOcupado(Dia dia, int horario)
+            => dia.Aulas[horario]?.Id != 0;
+        public bool DiaOcupado(Dia dia)
+            => HorarioOcupado(dia, PrimeiroHorario) && HorarioOcupado(dia, SegundoHorario);
+        */
+
+
+        //Lista de consumo com o total de cada matéria p/ semana
+        //Todo: mudar nome
+        public List<Aula> AulasParaTodasAsAulasDaSemana(List<Aula> aulas)
+        {
+            var aulasPorCargaHoraria = new List<Aula>();
+            foreach (var aula in aulas)
+            {
+                for(var i = 1; i <= aula.Disciplina.AulasPorSemana; i++)
+                    aulasPorCargaHoraria.Add(aula);
+            }
+            return aulasPorCargaHoraria;
+        }
+
+        //lista de consumo (todas aulas) e sai lista "bagunçada"
+        public List<Aula> DistribuiAulas(List<Aula> aulas)
+        {
+            //usa o hash pq ele muda bastante a cada geração
+            var rand = new Random(DateTime.Now.ToString().GetHashCode());
+            var aulasRandomicas = new List<Aula>();
+            while (aulas.Count > 0)
+            {
+                int index = rand.Next(0, aulas.Count);
+                aulasRandomicas.Add(aulas[index]);
+                aulas.RemoveAt(index);
+            }
+
+            return aulasRandomicas;
+        }
+
+        //Popula lista semana através da lista random
+        public List<Dia> CriaSemana(List<Aula> aulas)
+        {
+            var semana = new List<Dia>();
+            for(var i = 1; i <= 5; i++)
+            {
+                var dia = new Dia() { DiaDaSemana = (DiasDaSemana)i };
+
+                for(var j = 0; j <= 3; j++)
+                {
+                    dia.Aulas[j] = aulas.First();
+                    aulas.Remove(aulas.First());
+                }
+                semana.Add(dia);
+            }
+            return semana;
+        }
+
+        //ToDo: não feita ainda, fazer
+        /*public bool RegraCumpridaAulasRepetidasPorDia(List<Dia> dias)
+        {
+            foreach(var dia in dias)
+            {
+
+            }
+        }*/
 
         public Seed()
         {
@@ -17,13 +101,14 @@ namespace AlocacaoHorarios_SolucaoInicial.DAL
             Salas = new List<Sala>();
             Disciplinas = new List<Disciplina>();
             Aulas = new List<Aula>();
-            Dias = new List<Dia>();
+            Semana = new List<Dia>();
 
             PreencheProfessores();
             PreencheSalas();
             PreencheDisciplinasPrimeiroSemestre();
             PreencheAula();
-            PreencheDia();
+
+            Semana = CriaSemana(DistribuiAulas(AulasParaTodasAsAulasDaSemana(Aulas)));
         }
 
         public void PreencheProfessores()
@@ -40,7 +125,7 @@ namespace AlocacaoHorarios_SolucaoInicial.DAL
             Professores.Add(new Professor("10", "João Evangelista"));
             Professores.Add(new Professor("11", "Alisson Ribeiro"));
             Professores.Add(new Professor("12", "Helton Júnior"));
-            Professores.Add(new Professor("13", "Fernanda Maffei "));                                                                 
+            Professores.Add(new Professor("13", "Fernanda Maffei "));
         }
 
         public void PreencheSalas()
@@ -94,12 +179,8 @@ namespace AlocacaoHorarios_SolucaoInicial.DAL
 
         public void PreencheAula()
         {
-            Aulas.Add(new Aula(1 ,GetDisicplinaId(1), GetSalaId(10)));
-            Aulas.Add(new Aula(2 ,GetDisicplinaId(2), GetSalaId(10)));
-            Aulas.Add(new Aula(3 ,GetDisicplinaId(3), GetSalaId(10)));
-            Aulas.Add(new Aula(4 ,GetDisicplinaId(4), GetSalaId(10)));
-            Aulas.Add(new Aula(5 ,GetDisicplinaId(5), GetSalaId(10)));
-            Aulas.Add(new Aula(6 ,GetDisicplinaId(6), GetSalaId(10)));
+            for(var i = 1; i <= 6; i++)
+                Aulas.Add(new Aula(i, GetDisicplinaId(i), GetSalaId(10)));
         }
 
         public Aula GetAulaId(int id)
@@ -110,6 +191,8 @@ namespace AlocacaoHorarios_SolucaoInicial.DAL
             return null;
         }
 
+        /*
+         * Preenche dia estatico
         public void PreencheDia()
         {
             Aula[] segunda = new Aula[2] { GetAulaId(1), GetAulaId(6) };
@@ -124,5 +207,6 @@ namespace AlocacaoHorarios_SolucaoInicial.DAL
             Dias.Add(new Dia(4, quinta));
             Dias.Add(new Dia(5, sexta));
         }
+        */
     }
 }

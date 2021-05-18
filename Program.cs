@@ -13,7 +13,7 @@ namespace AlocacaoHorarios_SolucaoInicial
 
             Exibicao exibicao = new Exibicao();
 
-            exibicao.ExibirSemana(popula.Dias);
+            exibicao.ExibirSemana(popula.Semana);
             
                      
             /*
