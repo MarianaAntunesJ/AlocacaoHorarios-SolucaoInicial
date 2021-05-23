@@ -1,91 +1,63 @@
-﻿using AlocacaoHorarios_SolucaoInicial.Entidades;
+﻿using AlocacaoHorarios_SolucaoInicial.Entities;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text;
+using ConsoleTables;
 
 namespace AlocacaoHorarios_SolucaoInicial.View
 {
     class Exibicao
     {
-        private int _maiorString { get; set; }
+        private List<Dia> _dias { get; }
 
-        //ToDo: lógica para espaços, problema: usando o ceiling para string com total impar
-        public void ExibirSemana(List<Dia> dias)
+        public Exibicao(List<Dia> dias)
         {
-            CalculaMaiorString(dias);
+            _dias = dias;
+        }
 
-            var stringBuilder = new StringBuilder();
+        private Array[] GeraCampoDoHorario(int aula)
+        {
+            var disciplinas = _dias.Select(_ => _.Aulas[aula].Disciplina.Nome).ToArray();
+            var professores = _dias.Select(_ => _.Aulas[aula].Disciplina.Professor.Nome).ToArray();
+            var salas = _dias.Select(_ => _.Aulas[aula].Sala.Id.ToString()).ToArray();
 
-            stringBuilder = CabecalhoSemana(dias, stringBuilder);
+            return new Array[] { disciplinas, professores, salas };
+        }
+
+        private string[] GerarTracejado()
+        {
+            var a = new string('-', PegaMaiorString());
+            return new string[] { a, a, a, a, a };
+        }
+
+        public void ExibirSemana()
+        {
+            var cabecalhoDaSemana = _dias.Select(_ => $"{_.DiaDaSemana}-Feira").ToArray();
+            var tracejado = GerarTracejado();
+            var table = new ConsoleTable(cabecalhoDaSemana);
 
             for (var i = 0; i <= 3; i++)
             {
-                stringBuilder = Aula(dias, stringBuilder, i);
-                stringBuilder = Professor(dias, stringBuilder, i);
-                stringBuilder = Sala(dias, stringBuilder, i);
+                var horario = GeraCampoDoHorario(i);
+                table.AddRow((string[])horario[0])
+                    .AddRow((string[])horario[1])
+                    .AddRow((string[])horario[2])
+                    .AddRow(tracejado);
             }
 
-            Console.WriteLine(stringBuilder);
+            table.Write(Format.MarkDown);
         }
 
-        private StringBuilder CabecalhoSemana(List<Dia> dias, StringBuilder stringBuilder)
+        private int PegaMaiorString()
         {
-            foreach (var dia in dias)
+            var maiores = new List<int>
             {
-                var space = new string(' ', (int)Math.Ceiling((_maiorString - $"{dia.DiaDaSemana}-Feira".Length) / 2.0));
-                stringBuilder.Append($"{space}{dia.DiaDaSemana}-Feira{space}|");
-            }
+                _dias.Max(_ => _.Aulas.Max(_ => _.Disciplina.Professor.Nome.Length)),
+                _dias.Max(_ => _.Aulas.Max(_ => _.Disciplina.Nome.Length)),
+                _dias.Max(_ => $"{_.DiaDaSemana}-Feira".Length)
+            };
 
-            stringBuilder.Append("\n");
-            return stringBuilder;
-        }
-
-        private StringBuilder Aula(List<Dia> dias, StringBuilder stringBuilder, int index)
-        {
-            foreach (var dia in dias)
-            {
-                var space = new string(' ', (int)Math.Ceiling((_maiorString - dia.Aulas[index].Disciplina.Nome.Length) / 2.0));
-                stringBuilder.Append($"{space}{dia.Aulas[index].Disciplina.Nome}{space}|");
-            }   
-            stringBuilder.Append("\n");
-            return stringBuilder;
-        }
-
-        private StringBuilder Professor(List<Dia> dias, StringBuilder stringBuilder, int index)
-        {
-            foreach (var dia in dias)
-            {
-                var space = new string(' ', (int)Math.Ceiling((_maiorString - dia.Aulas[index].Disciplina.Professor.Nome.Length) / 2.0));
-                stringBuilder.Append($"{space}{dia.Aulas[index].Disciplina.Professor.Nome}{space}|");
-            }
-            stringBuilder.Append("\n");
-            return stringBuilder;
-        }
-
-        private StringBuilder Sala(List<Dia> dias, StringBuilder stringBuilder, int index)
-        {
-            foreach (var dia in dias)
-            {
-                var space = new string(' ', (int)Math.Ceiling((_maiorString - dia.Aulas[index].Sala.Id.ToString().Length) / 2.0));
-                stringBuilder.Append($"{space}{dia.Aulas[index].Sala.Id}{space}|");
-            }
-                
-            stringBuilder.Append('\n');
-            stringBuilder.Append('-', 118);
-            stringBuilder.Append('\n');
-            return stringBuilder;
-        }
-
-        private void CalculaMaiorString(List<Dia> dias)
-        {
-            foreach (var dia in dias)
-            {
-                var a = dia.Aulas.OrderByDescending(_ => _.Disciplina.Professor.Nome.Length).First().Disciplina.Professor.Nome.Length;
-                if (a > _maiorString)
-                    _maiorString = a;
-            }
-            _maiorString += 2;
+            return maiores.Max() + 2;
         }
     }
 }

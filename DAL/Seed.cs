@@ -1,4 +1,5 @@
-﻿using AlocacaoHorarios_SolucaoInicial.Entidades;
+﻿using AlocacaoHorarios_SolucaoInicial.Entities;
+using AlocacaoHorarios_SolucaoInicial.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,102 +14,18 @@ namespace AlocacaoHorarios_SolucaoInicial.DAL
         public List<Aula> Aulas { get; }
         public List<Dia> Semana { get; }
 
-        /*
-         LOGICA PARA REUTILIZAR
-
-         private int PrimeiroHorario = 0;
-        private int SegundoHorario = 1;
-
-        public IEnumerable<Dia> CriaSemana()
-        {
-            var dias = new List<Dia>();
-            for (var i = 1; i <= 5; i++)
-                dias.Add(new Dia() { Id = i });
-            return dias;
-        }
-
-        public bool AulaRepetidaNoDia(Aula aula, Dia dia)
-            => (AulaRepetidaNoHorario(aula, dia, PrimeiroHorario) || AulaRepetidaNoHorario(aula, dia, SegundoHorario));
-        public bool AulaRepetidaNoHorario(Aula aula, Dia dia, int horario)
-            => aula.Id == dia.Aulas[horario].Id;
-
-        public bool HorarioOcupado(Dia dia, int horario)
-            => dia.Aulas[horario]?.Id != 0;
-        public bool DiaOcupado(Dia dia)
-            => HorarioOcupado(dia, PrimeiroHorario) && HorarioOcupado(dia, SegundoHorario);
-        */
-
-
-        //Lista de consumo com o total de cada matéria p/ semana
-        //Todo: mudar nome
-        public List<Aula> AulasParaTodasAsAulasDaSemana(List<Aula> aulas)
-        {
-            var aulasPorCargaHoraria = new List<Aula>();
-            foreach (var aula in aulas)
-            {
-                for(var i = 1; i <= aula.Disciplina.AulasPorSemana; i++)
-                    aulasPorCargaHoraria.Add(aula);
-            }
-            return aulasPorCargaHoraria;
-        }
-
-        //lista de consumo (todas aulas) e sai lista "bagunçada"
-        public List<Aula> DistribuiAulas(List<Aula> aulas)
-        {
-            //usa o hash pq ele muda bastante a cada geração
-            var rand = new Random(DateTime.Now.ToString().GetHashCode());
-            var aulasRandomicas = new List<Aula>();
-            while (aulas.Count > 0)
-            {
-                int index = rand.Next(0, aulas.Count);
-                aulasRandomicas.Add(aulas[index]);
-                aulas.RemoveAt(index);
-            }
-
-            return aulasRandomicas;
-        }
-
-        //Popula lista semana através da lista random
-        public List<Dia> CriaSemana(List<Aula> aulas)
-        {
-            var semana = new List<Dia>();
-            for(var i = 1; i <= 5; i++)
-            {
-                var dia = new Dia() { DiaDaSemana = (DiasDaSemana)i };
-
-                for(var j = 0; j <= 3; j++)
-                {
-                    dia.Aulas[j] = aulas.First();
-                    aulas.Remove(aulas.First());
-                }
-                semana.Add(dia);
-            }
-            return semana;
-        }
-
-        //ToDo: não feita ainda, fazer
-        /*public bool RegraCumpridaAulasRepetidasPorDia(List<Dia> dias)
-        {
-            foreach(var dia in dias)
-            {
-
-            }
-        }*/
-
         public Seed()
         {
             Professores = new List<Professor>();
             Salas = new List<Sala>();
             Disciplinas = new List<Disciplina>();
             Aulas = new List<Aula>();
-            Semana = new List<Dia>();
 
             PreencheProfessores();
             PreencheSalas();
             PreencheDisciplinasPrimeiroSemestre();
             PreencheAula();
-
-            Semana = CriaSemana(DistribuiAulas(AulasParaTodasAsAulasDaSemana(Aulas)));
+            Semana = PreencheSemana(Aulas);
         }
 
         public void PreencheProfessores()
@@ -191,22 +108,10 @@ namespace AlocacaoHorarios_SolucaoInicial.DAL
             return null;
         }
 
-        /*
-         * Preenche dia estatico
-        public void PreencheDia()
+        public List<Dia> PreencheSemana(List<Aula> aulas)
         {
-            Aula[] segunda = new Aula[2] { GetAulaId(1), GetAulaId(6) };
-            Aula[] terca = new Aula[2] { GetAulaId(4), GetAulaId(6) };
-            Aula[] quarta = new Aula[2] { GetAulaId(5), GetAulaId(2) };
-            Aula[] quinta = new Aula[2] { GetAulaId(1), GetAulaId(4) };
-            Aula[] sexta = new Aula[2] { GetAulaId(2), GetAulaId(3) };
-
-            Dias.Add(new Dia(1, segunda));
-            Dias.Add(new Dia(2, terca));
-            Dias.Add(new Dia(3, quarta));
-            Dias.Add(new Dia(4, quinta));
-            Dias.Add(new Dia(5, sexta));
+            Semana semana = new Semana();
+            return semana.PreencheSemana(aulas);
         }
-        */
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace AlocacaoHorarios_SolucaoInicial.Entidades
+﻿namespace AlocacaoHorarios_SolucaoInicial.Entities
 {
     class Professor
     {
