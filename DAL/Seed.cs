@@ -1,8 +1,6 @@
 ﻿using AlocacaoHorarios_SolucaoInicial.Entities;
-using AlocacaoHorarios_SolucaoInicial.Helper;
-using System;
+using AlocacaoHorarios_SolucaoInicial.Helpers;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace AlocacaoHorarios_SolucaoInicial.DAL
 {
@@ -12,7 +10,7 @@ namespace AlocacaoHorarios_SolucaoInicial.DAL
         public List<Sala> Salas { get; }
         public List<Disciplina> Disciplinas { get; }
         public List<Aula> Aulas { get; }
-        public List<Dia> Semana { get; }
+        public Semana Semana { get; }
 
         public Seed()
         {
@@ -20,12 +18,13 @@ namespace AlocacaoHorarios_SolucaoInicial.DAL
             Salas = new List<Sala>();
             Disciplinas = new List<Disciplina>();
             Aulas = new List<Aula>();
+            Semana = new Semana();
 
             PreencheProfessores();
             PreencheSalas();
             PreencheDisciplinasPrimeiroSemestre();
             PreencheAula();
-            Semana = PreencheSemana(Aulas);
+            Semana.Dias = PreencheSemana(Aulas);
         }
 
         public void PreencheProfessores()

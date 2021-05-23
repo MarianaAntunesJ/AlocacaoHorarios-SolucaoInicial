@@ -3,13 +3,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AlocacaoHorarios_SolucaoInicial.Helper
+namespace AlocacaoHorarios_SolucaoInicial.Helpers
 {
     class Semana
     {
+        public List<Dia> Dias { get; set; }
         public List<Dia> PreencheSemana(List<Aula> aulas)
             => CriaSemana(DistribuiAulas(AulasParaTodasAsAulasDaSemana(aulas)));
-        
+
+        public Semana() : this(new List<Dia>())
+        {
+        }
+
+        public Semana(List<Dia> dias)
+        {
+            Dias = dias;
+        }
+
         //Lista de consumo com o total de cada matéria p/ semana
         //Todo: mudar nome
         private List<Aula> AulasParaTodasAsAulasDaSemana(List<Aula> aulas)
@@ -55,6 +65,18 @@ namespace AlocacaoHorarios_SolucaoInicial.Helper
                 semana.Add(dia);
             }
             return semana;
+        }
+
+        public void TrocaAulas(Tuple<int, int> aulaEntrada1, Tuple<int, int> aulaEntrada2)
+        {
+            if(aulaEntrada2 != null)
+            {
+                var aula1 = Dias[aulaEntrada1.Item1].Aulas[aulaEntrada1.Item2];
+                var aula2 = Dias[aulaEntrada2.Item1].Aulas[aulaEntrada2.Item2];
+
+                Dias[aulaEntrada1.Item1].Aulas[aulaEntrada1.Item2] = aula2;
+                Dias[aulaEntrada2.Item1].Aulas[aulaEntrada2.Item2] = aula1;
+            }
         }
     }
 }

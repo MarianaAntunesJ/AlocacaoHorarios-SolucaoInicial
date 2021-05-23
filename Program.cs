@@ -1,4 +1,5 @@
 ﻿using AlocacaoHorarios_SolucaoInicial.DAL;
+using AlocacaoHorarios_SolucaoInicial.Helpers;
 using AlocacaoHorarios_SolucaoInicial.View;
 
 namespace AlocacaoHorarios_SolucaoInicial
@@ -7,9 +8,15 @@ namespace AlocacaoHorarios_SolucaoInicial
     {
         static void Main()
         {
-            Seed popula = new Seed();
+            var popula = new Seed();
 
-            Exibicao exibicao = new Exibicao(popula.Semana);
+            var restricoes = new Restricoes();
+
+            var exibicao = new Exibicao(popula.Semana);
+
+            exibicao.ExibirSemana();
+
+            exibicao._semana = restricoes.A(popula.Semana);
 
             exibicao.ExibirSemana();
         }

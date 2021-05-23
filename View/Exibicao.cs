@@ -1,25 +1,25 @@
-﻿using AlocacaoHorarios_SolucaoInicial.Entities;
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 using ConsoleTables;
+using AlocacaoHorarios_SolucaoInicial.Helpers;
 
 namespace AlocacaoHorarios_SolucaoInicial.View
 {
     class Exibicao
     {
-        private List<Dia> _dias { get; }
+        public Semana _semana { get; set; }
 
-        public Exibicao(List<Dia> dias)
+        public Exibicao(Semana semana)
         {
-            _dias = dias;
+            _semana = semana;
         }
 
         private Array[] GeraCampoDoHorario(int aula)
         {
-            var disciplinas = _dias.Select(_ => _.Aulas[aula].Disciplina.Nome).ToArray();
-            var professores = _dias.Select(_ => _.Aulas[aula].Disciplina.Professor.Nome).ToArray();
-            var salas = _dias.Select(_ => _.Aulas[aula].Sala.Id.ToString()).ToArray();
+            var disciplinas = _semana.Dias.Select(_ => _.Aulas[aula].Disciplina.Nome).ToArray();
+            var professores = _semana.Dias.Select(_ => _.Aulas[aula].Disciplina.Professor.Nome).ToArray();
+            var salas = _semana.Dias.Select(_ => _.Aulas[aula].Sala.Id.ToString()).ToArray();
 
             return new Array[] { disciplinas, professores, salas };
         }
@@ -32,7 +32,7 @@ namespace AlocacaoHorarios_SolucaoInicial.View
 
         public void ExibirSemana()
         {
-            var cabecalhoDaSemana = _dias.Select(_ => $"{_.DiaDaSemana}-Feira").ToArray();
+            var cabecalhoDaSemana = _semana.Dias.Select(_ => $"{_.DiaDaSemana}-Feira").ToArray();
             var tracejado = GerarTracejado();
             var table = new ConsoleTable(cabecalhoDaSemana);
 
@@ -52,9 +52,9 @@ namespace AlocacaoHorarios_SolucaoInicial.View
         {
             var maiores = new List<int>
             {
-                _dias.Max(_ => _.Aulas.Max(_ => _.Disciplina.Professor.Nome.Length)),
-                _dias.Max(_ => _.Aulas.Max(_ => _.Disciplina.Nome.Length)),
-                _dias.Max(_ => $"{_.DiaDaSemana}-Feira".Length)
+                _semana.Dias.Max(_ => _.Aulas.Max(_ => _.Disciplina.Professor.Nome.Length)),
+                _semana.Dias.Max(_ => _.Aulas.Max(_ => _.Disciplina.Nome.Length)),
+                _semana.Dias.Max(_ => $"{_.DiaDaSemana}-Feira".Length)
             };
 
             return maiores.Max() + 2;
