@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace AlocacaoHorarios_SolucaoInicial.DAL
 {
+    // Classe para semear dados. Útil para testes, não sendo mais necessário preencher a cada uso.
     class Seed
     {
         public List<Professor> Professores { get; }
@@ -23,7 +24,7 @@ namespace AlocacaoHorarios_SolucaoInicial.DAL
             PreencheProfessores();
             PreencheSalas();
             PreencheDisciplinasPrimeiroSemestre();
-            PreencheAula();
+            PreencheAulas();
             Semana.Dias = PreencheSemana(Aulas);
         }
 
@@ -93,7 +94,8 @@ namespace AlocacaoHorarios_SolucaoInicial.DAL
             return null;
         }
 
-        public void PreencheAula()
+        //ToDo: futuramente será PreencheAulas por semestre
+        public void PreencheAulas()
         {
             for(var i = 1; i <= 6; i++)
                 Aulas.Add(new Aula(i, GetDisicplinaId(i), GetSalaId(10)));

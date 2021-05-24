@@ -16,7 +16,7 @@ namespace AlocacaoHorarios_SolucaoInicial
 
             exibicao.ExibirSemana();
 
-            exibicao._semana = restricoes.A(popula.Semana);
+            exibicao._semana = restricoes.AulaDupla(popula.Semana);
 
             exibicao.ExibirSemana();
         }

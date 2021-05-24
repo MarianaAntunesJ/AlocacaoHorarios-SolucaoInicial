@@ -15,6 +15,8 @@ namespace AlocacaoHorarios_SolucaoInicial.View
             _semana = semana;
         }
 
+        /*Método - Gera campos do horário. 
+          Cria arrays de disciplinas, professores e salas. Depois insere em um array único. (Array[ ]).*/
         private Array[] GeraCampoDoHorario(int aula)
         {
             var disciplinas = _semana.Dias.Select(_ => _.Aulas[aula].Disciplina.Nome).ToArray();
@@ -24,12 +26,16 @@ namespace AlocacaoHorarios_SolucaoInicial.View
             return new Array[] { disciplinas, professores, salas };
         }
 
+        /* Método - gera traços. Visual. 
+            Apenas traceja o horário a cada 3 rows (linhas) - disciplina, professor e sala - para melhor visualização.*/
         private string[] GerarTracejado()
         {
-            var a = new string('-', PegaMaiorString());
-            return new string[] { a, a, a, a, a };
+            var tracos = new string('-', PegaMaiorString());
+            return new string[] { tracos, tracos, tracos, tracos, tracos };
         }
 
+        /* Package utilizado: ConsoleTables, por Khalid Akmeh. 
+           Método - Exibe semana. Construímos uma table para o horário, adicionando nossas aulas em rows. */
         public void ExibirSemana()
         {
             var cabecalhoDaSemana = _semana.Dias.Select(_ => $"{_.DiaDaSemana}-Feira").ToArray();
@@ -45,9 +51,11 @@ namespace AlocacaoHorarios_SolucaoInicial.View
                     .AddRow(tracejado);
             }
 
-            table.Write(Format.MarkDown);
+            table.Write(Format.MarkDown); //Tira tracejado a cada row
         }
 
+        /* Método - Pegar a maior string. 
+            Procura a maior string e retorna seu length, para fins como limitação de tracejado de linha.*/
         private int PegaMaiorString()
         {
             var maiores = new List<int>

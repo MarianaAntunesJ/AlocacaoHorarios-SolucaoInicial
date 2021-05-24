@@ -8,8 +8,6 @@ namespace AlocacaoHorarios_SolucaoInicial.Helpers
     class Semana
     {
         public List<Dia> Dias { get; set; }
-        public List<Dia> PreencheSemana(List<Aula> aulas)
-            => CriaSemana(DistribuiAulas(AulasParaTodasAsAulasDaSemana(aulas)));
 
         public Semana() : this(new List<Dia>())
         {
@@ -20,9 +18,15 @@ namespace AlocacaoHorarios_SolucaoInicial.Helpers
             Dias = dias;
         }
 
-        //Lista de consumo com o total de cada matéria p/ semana
-        //Todo: mudar nome
-        private List<Aula> AulasParaTodasAsAulasDaSemana(List<Aula> aulas)
+        // Método - Preenche seamana. Chamas as funções necessárias para a criação inicial da semana.
+        public List<Dia> PreencheSemana(List<Aula> aulas)
+            => CriaSemana(DistribuiAulas(PreencheCargaHorariaDasAulas(aulas)));
+
+
+        /* Método - Lista de consumo. Possui todas as aulas que cada matéria deve ter. 
+            Exem: Lógica possui 6 aulas por semana, portanto existem 6 indexes contendo Lógica como valor.*/
+
+        private List<Aula> PreencheCargaHorariaDasAulas(List<Aula> aulas)
         {
             var aulasPorCargaHoraria = new List<Aula>();
             foreach (var aula in aulas)
@@ -33,10 +37,11 @@ namespace AlocacaoHorarios_SolucaoInicial.Helpers
             return aulasPorCargaHoraria;
         }
 
-        //lista de consumo (todas aulas) e sai lista "bagunçada"
+
+        /* Método - Distribui aulas de forma randômica.
+            O uso do Hash garante maior aleatoriedade de saídas.*/
         private List<Aula> DistribuiAulas(List<Aula> aulas)
         {
-            //usa o hash pq ele muda bastante a cada geração
             var rand = new Random(DateTime.Now.ToString().GetHashCode());
             var aulasRandomicas = new List<Aula>();
             while (aulas.Count > 0)
@@ -49,7 +54,9 @@ namespace AlocacaoHorarios_SolucaoInicial.Helpers
             return aulasRandomicas;
         }
 
-        //Popula lista semana através da lista random
+
+        /* Método - Cria semana. Distribui as aulas em uma lista que representa a semana.
+            obs: Sendo fixo como uma lista de 5 posições (semana) e outra de lista de 4 posições (aulas) para representar o dia de aulas.*/
         private List<Dia> CriaSemana(List<Aula> aulas)
         {
             var semana = new List<Dia>();
@@ -67,6 +74,9 @@ namespace AlocacaoHorarios_SolucaoInicial.Helpers
             return semana;
         }
 
+
+        /* Método - Troca aulas. Troca aulas entre elas mesmas. 
+            Recebe duas tuplas contendo <int (Dia da semana), <int (Horario do dia)>.*/
         public void TrocaAulas(Tuple<int, int> aulaEntrada1, Tuple<int, int> aulaEntrada2)
         {
             if(aulaEntrada2 != null)
