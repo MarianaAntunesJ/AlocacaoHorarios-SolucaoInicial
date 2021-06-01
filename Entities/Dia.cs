@@ -2,12 +2,23 @@
 {
     class Dia
     {
+        // Defini quantidades de aulas para o vetor
+        private readonly int _qtdAulas = 4;
+
+        // Tipo enum para definir o nome do dia. Ex: segunda
         public DiasDaSemana DiaDaSemana { get; set; }
+
         public Aula[] Aulas { get; private set; }
 
         public Dia()
         {
-            Aulas = new Aula[4] { new Aula(), new Aula(), new Aula(), new Aula() };
+            Aulas = new Aula[_qtdAulas];
+
+            // Intancia todos os index do vetor Aulas;
+            for(var i = 0; i < _qtdAulas; i++)
+            {
+                Aulas[i] = new Aula();
+            }
         }
 
         public Dia(DiasDaSemana diaDaSemana, Aula[] aulas)
@@ -18,7 +29,6 @@
 
         public bool AulaDesocupada(int index) => Aulas[index] == null;
 
-        //ToDo: Refazer para vetor[4]
         public bool InsereNaAulaDesocupada(Aula aula, int index)
         {
             if (AulaDesocupada(index))
@@ -27,14 +37,6 @@
                 return true;
             }
             return false;
-        }
-
-        //ToDo: Refazer para vetor[4]
-        public void TrocaDias(int aula1, int aula2)
-        {
-            var aux = Aulas[aula1];
-            Aulas[aula1] = Aulas[aula2];
-            Aulas[aula2] = aux;
         }
     }
 

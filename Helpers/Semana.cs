@@ -76,16 +76,17 @@ namespace AlocacaoHorarios_SolucaoInicial.Helpers
 
 
         /* Método - Troca aulas. Troca aulas entre elas mesmas. 
-            Recebe duas tuplas contendo <int (Dia da semana), <int (Horario do dia)>.*/
-        public void TrocaAulas(Tuple<int, int> aulaEntrada1, Tuple<int, int> aulaEntrada2)
+            Recebe duas tuplas contendo <int (Dia da semana), <int (Horario do dia)> das aulas.*/
+        public void TrocaAulas(Tuple<int, int> diaHorarioAulaSubstituida, Tuple<int, int> diaHorarioAulaSubstituta)
         {
-            if(aulaEntrada2 != null)
+            if(diaHorarioAulaSubstituta != null)
             {
-                var aula1 = Dias[aulaEntrada1.Item1].Aulas[aulaEntrada1.Item2];
-                var aula2 = Dias[aulaEntrada2.Item1].Aulas[aulaEntrada2.Item2];
+                var aulaSubstituida = Dias[diaHorarioAulaSubstituida.Item1].Aulas[diaHorarioAulaSubstituida.Item2];
+                var aulaSubstituta = Dias[diaHorarioAulaSubstituta.Item1].Aulas[diaHorarioAulaSubstituta.Item2];
 
-                Dias[aulaEntrada1.Item1].Aulas[aulaEntrada1.Item2] = aula2;
-                Dias[aulaEntrada2.Item1].Aulas[aulaEntrada2.Item2] = aula1;
+                //Troca posições entre aulas
+                Dias[diaHorarioAulaSubstituida.Item1].Aulas[diaHorarioAulaSubstituida.Item2] = aulaSubstituta;
+                Dias[diaHorarioAulaSubstituta.Item1].Aulas[diaHorarioAulaSubstituta.Item2] = aulaSubstituida;
             }
         }
     }

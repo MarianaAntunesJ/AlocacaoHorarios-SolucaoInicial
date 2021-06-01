@@ -14,28 +14,9 @@
         {
             Periodo = periodo;
         }
-
-        public bool DiaDesocupado(int index) => Dias[index] == null;
-
-        public bool InsereNoDiaDesocupado(Dia dia, int index)
-        {
-            if (DiaDesocupado(index))
-            {
-                Dias[index] = dia;
-                return true;
-            }  
-            return false;
-        }
-
-        public void TrocaDias(int dia1, int dia2)
-        {
-            var aux = Dias[dia1];
-            Dias[dia1] = Dias[dia2];
-            Dias[dia2] = aux;
-        }
     }
 
-    //ToDo: o que ele faz?
+    //ToDo: implementar
     enum Periodos
     {
         Primeiro,
